@@ -3,25 +3,32 @@ name: CI
 on:
   push:
     branches:
-      - master
+        - master
   pull_request:
     branches:
-      - master
+        - master
 
 jobs:
-  build:
-    name: 'Build and Push'
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    build:
+        name: 'Build and Push'
+        runs-on: ubuntu-latest
 
-      - name: Setup NodeJs
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'yarn'
+        strategy:
+            matrix:
+                node-version: [18, 20, 22]
+        
+        steps:
+            - name: Checkout source code
+              uses: actions/checkout@v4
+
+            - name: Setup NodeJs
+              uses: actions/setup-node@v4
+              with:
+                node-version: ${{ matrix.node-version }}
+                cache: 'yarn'
             
-      - name: Install dependencies
-        run: yarn  
+            - name: Install dependencies
+              run: yarn  
+            
+            - name: Running Tests
+              run: yarn test
