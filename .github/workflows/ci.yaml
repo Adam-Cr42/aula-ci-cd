@@ -15,7 +15,7 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [18, 20, 22]
+                node-version: [22]
         
         steps:
             - name: Checkout source code
@@ -32,3 +32,11 @@ jobs:
             
             - name: Running Tests
               run: yarn test
+
+            - name: Login into the Container Registry
+              uses: docker/login-action@v3
+              with:
+                username: ${{ secrets.DOCKERHUB_USERNAME }}
+                password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+                
