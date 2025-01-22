@@ -39,10 +39,21 @@ jobs:
                 username: ${{ secrets.DOCKERHUB_USERNAME }}
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+            # - name: Build Docker Image
+            # run: docker build -t adamcr42/auladevops .
+
+            #- name: Push Docker Image to DockerHub
+            #  run: docker push adamcr42/auladevops:latest
+
+            - name: Generate Tag
+              id: generate_tag
+              run: |
+                  SHA=$(echo $GITHUB_SHA | head -c7)
+                  echo "sha=$SHA" >> $GITHUB_OUTPUT
             - name: Build Docker Image
-              run: docker build -t adamcr42/auladevops .
+              run: docker build -t adamcr42/auladevops:${{ steps.generate_tag.outputs.sha }} .
 
             - name: Push Docker Image to DockerHub
-              run: docker push adamcr42/auladevops:latest
+              run: docker push adamcr42/auladevops:${{ steps.generate_tag.outputs.sha }}
 
                 
