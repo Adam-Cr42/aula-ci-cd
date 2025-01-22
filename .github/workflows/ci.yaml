@@ -39,4 +39,10 @@ jobs:
                 username: ${{ secrets.DOCKERHUB_USERNAME }}
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+            - name: Build Docker Image
+              run: docker build -t adamcr42/auladevops .
+
+            - name: Push Docker Image to DockerHub
+              run: docker push adamcr42/auladevops:latest
+
                 
